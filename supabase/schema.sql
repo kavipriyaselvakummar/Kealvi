@@ -92,3 +92,15 @@ create table poll_votes (
 
 create index poll_votes_poll_id_idx on poll_votes (poll_id);
 create index poll_options_poll_id_idx on poll_options (poll_id);
+
+-- ── users (Feature: Auth) ──────────────────────────────────────────
+create table if not exists users (
+  id          uuid primary key default gen_random_uuid(),
+  email       text unique not null,
+  password    text not null,
+  name        text not null,
+  role        text default 'Attendee',
+  created_at  timestamptz default now()
+);
+
+create index users_email_idx on users (email);

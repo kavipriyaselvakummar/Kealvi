@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background:   #f7f5f0;
+  --background:   #f4f6fb;
   --surface:      #ffffff;
-  --surface2:     #efece6;
-  --foreground:   #18160f;
-  --muted:        #6e6a61;
-  --border:       #e0dbd1;
-  --accent:       #5b3de8;
-  --accent-light: #edeaff;
-  --accent-mid:   #7c62ef;
-  --danger:       #c94040;
-  --success:      #1a7a52;
+  --surface2:     #f8fafc;
+  --surface3:     #e2e8f0;
+  --foreground:   #0f172a;
+  --muted:        #64748b;
+  --border:       #e2e8f0;
+  --accent:       #4f46e5;
+  --accent-light: #eeeffe;
+  --accent-mid:   #6366f1;
+  --accent-dark:  #4338ca;
+  --danger:       #ef4444;
+  --success:      #10b981;
+  --radius:       12px;
 }
 
 @theme inline {
@@ -28,7 +31,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -40,197 +44,126 @@ a:hover {
   color: var(--accent);
 }
 
-/* Editorial page header */
+/* Page Header Styling */
 .editorial-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid var(--foreground);
-  padding-bottom: 12px;
-  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+  margin-bottom: 28px;
 }
 
 .editorial-header h1 {
-  font-size: 28px;
-  font-weight: 500;
+  font-size: 26px;
+  font-weight: 700;
   letter-spacing: -0.5px;
   color: var(--foreground);
 }
 
 .editorial-dateline {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
-  font-family: Georgia, serif;
-}
-
-/* Two-column editorial layout */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 28px;
-  align-items: start;
+  font-weight: 500;
 }
 
 /* Stat strip */
 .stat-strip {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
   margin-bottom: 28px;
 }
 
 .stat-block {
-  border-top: 2px solid var(--border);
-  padding-top: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stat-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
 .stat-block.highlight {
-  border-top-color: var(--accent);
+  border-left: 4px solid var(--accent);
 }
 
 .stat-num {
-  font-size: 26px;
-  font-weight: 500;
+  font-size: 28px;
+  font-weight: 700;
   color: var(--foreground);
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .stat-label {
   font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 6px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-}
-
-/* Section heading */
-.section-hed {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
-  padding-bottom: 6px;
-  border-bottom: 0.5px solid var(--border);
-}
-
-/* Aside card */
-.aside-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: 4px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.aside-card-label {
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 0.5px solid var(--border);
-}
-
-/* Feature card (accent bg) */
-.feature-card {
-  background: var(--accent);
-  color: #fff;
-  border-radius: 4px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-/* Question row */
-.q-row {
-  padding: 14px 0;
-  border-bottom: 0.5px solid var(--border);
-  display: grid;
-  grid-template-columns: 36px 1fr auto;
-  gap: 12px;
-  align-items: start;
-}
-
-.q-row:last-child {
-  border-bottom: none;
-}
-
-.q-rank {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--border);
-}
-
-.q-rank.top {
-  color: var(--accent);
-}
-
-/* Vote bar */
-.bar-track {
-  height: 2px;
-  background: var(--surface2);
-  border-radius: 1px;
-  margin-top: 8px;
-}
-
-.bar-fill {
-  height: 2px;
-  background: var(--accent);
-  border-radius: 1px;
-}
-
-/* Pill tags */
-.pill {
-  display: inline-block;
-  background: var(--surface2);
-  color: var(--muted);
-  font-size: 11px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  margin: 3px 2px;
-}
-
-.pill.active {
-  background: var(--accent-light);
-  color: var(--accent);
 }
 
 /* Input styles */
 .kv-input {
   width: 100%;
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: 4px;
-  padding: 9px 12px;
-  font-size: 13px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13.5px;
   color: var(--foreground);
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .kv-input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }
 
 /* Buttons */
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-mid) 100%);
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  padding: 9px 20px;
-  font-size: 13px;
-  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 13.5px;
+  font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--accent);
-  border: none;
-  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0;
+  padding: 8px 14px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-ghost:hover {
+  background: var(--accent-light);
 }

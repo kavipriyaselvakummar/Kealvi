@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getVoterId } from "@/lib/voter";
+import { getCurrentUser } from "@/lib/auth";
 
 type Question = {
   id: string;
@@ -106,6 +107,9 @@ export default function QuestionsList({
   async function submit() {
     if (!draft.trim()) return;
 
+    const user = getCurrentUser();
+    const authorName = user?.name || "Anonymous";
+
     try {
       const res = await fetch("/api/questions", {
         method: "POST",
@@ -115,6 +119,7 @@ export default function QuestionsList({
         },
         body: JSON.stringify({
           body: draft,
+          author: authorName,
         }),
       });
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getVoterId } from "@/lib/voter";
+import { getCurrentUser } from "@/lib/auth";
 
 type PollOption = {
   id: string;
@@ -105,6 +106,7 @@ export default function PollsList({
           body: JSON.stringify({
             body: question,
             options: cleanOptions,
+            author: getCurrentUser()?.name || "Anonymous",
           }),
         }
       );
