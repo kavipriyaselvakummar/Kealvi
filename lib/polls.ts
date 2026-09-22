@@ -85,14 +85,14 @@ export async function getPollsPage(
 
     const voteCounts: Record<string, number> = {};
 
-    (votes ?? []).forEach((vote: any) => {
+    (votes ?? []).forEach((vote: { option_id: string }) => {
       const key = String(vote.option_id);
       voteCounts[key] = (voteCounts[key] ?? 0) + 1;
     });
 
-    const pollsWithVotes = polls.map((poll: any) => ({
+    const pollsWithVotes = polls.map((poll: { id: string; body: string; author: string; created_at: string; poll_options: { id: string; option_text: string }[] }) => ({
       ...poll,
-      poll_options: poll.poll_options.map((option: any) => ({
+      poll_options: poll.poll_options.map((option: { id: string; option_text: string }) => ({
         ...option,
         votes: voteCounts[String(option.id)] ?? 0,
       })),

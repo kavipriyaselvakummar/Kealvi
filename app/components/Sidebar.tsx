@@ -21,6 +21,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     // Initial fetch
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(getCurrentUser());
 
     // Listen to custom auth change events

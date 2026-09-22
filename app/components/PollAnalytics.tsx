@@ -27,25 +27,44 @@ type Props = {
 };
 
 // Sleek modern colors for chart bars
-const COLORS = ["#5b3de8", "#7c62ef", "#9a85f2", "#bfaeff"];
+const COLORS = ["#4f46e5", "#06b6d4", "#8b5cf6", "#f59e0b", "#10b981"];
+
+const SAMPLE_POLLS: Poll[] = [
+  {
+    id: "sample-1",
+    body: "Which state management tool do you prefer for React? #React #State",
+    poll_options: [
+      { id: "s1", option_text: "Zustand", votes: 25 },
+      { id: "s2", option_text: "Redux Toolkit", votes: 12 },
+      { id: "s3", option_text: "React Context", votes: 8 },
+    ],
+  },
+  {
+    id: "sample-2",
+    body: "How do you write your CSS in modern projects? #CSS #Styling",
+    poll_options: [
+      { id: "s4", option_text: "Tailwind CSS", votes: 34 },
+      { id: "s5", option_text: "CSS Modules", votes: 15 },
+      { id: "s6", option_text: "Vanilla CSS", votes: 5 },
+    ],
+  },
+];
 
 export default function PollAnalytics({ polls }: Props) {
-  if (!polls || polls.length === 0) {
-    return (
-      <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center text-gray-400">
-        No polls conducted yet to analyze.
-      </div>
-    );
-  }
+  const displayPolls = (!polls || polls.length === 0) ? SAMPLE_POLLS : polls;
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <h2 style={{ fontSize: "18px", fontWeight: 700, color: "var(--foreground)", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
         <span>🗳️</span> Poll Vote Distributions
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {polls.map((poll) => {
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+        gap: "20px",
+      }}>
+        {displayPolls.map((poll) => {
           const totalVotes = poll.poll_options.reduce(
             (sum, opt) => sum + (opt.votes ?? 0),
             0
@@ -53,69 +72,84 @@ export default function PollAnalytics({ polls }: Props) {
 
           const data = poll.poll_options.map((opt) => ({
             name:
-              opt.option_text.length > 25
-                ? opt.option_text.slice(0, 25) + "..."
+              opt.option_text.length > 22
+                ? opt.option_text.slice(0, 22) + "..."
                 : opt.option_text,
             votes: opt.votes ?? 0,
+            displayVotes: (opt.votes && opt.votes > 0) ? opt.votes : 1,
           }));
 
           return (
             <div
               key={poll.id}
-              className="rounded-xl border border-white/10 bg-[#2d2a24] p-5 shadow-lg flex flex-col justify-between"
-              style={{ minHeight: "320px" }}
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "16px",
+                padding: "20px",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: "300px",
+              }}
             >
               <div>
-                <h3 className="text-sm font-semibold text-white mb-1">
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--foreground)", margin: "0 0 4px" }}>
                   {poll.body}
                 </h3>
-                <p className="text-xs text-gray-400 mb-4">
-                  Total Votes: {totalVotes}
+                <p style={{ fontSize: "12px", color: "var(--muted)", margin: "0 0 16px" }}>
+                  Total Votes: <strong style={{ color: "var(--accent)" }}>{totalVotes}</strong>
                 </p>
               </div>
 
-              {totalVotes === 0 ? (
-                <div className="flex-1 flex items-center justify-center border border-dashed border-white/10 rounded-lg bg-white/5 p-4 text-xs text-gray-400">
-                  No votes cast on this poll yet.
-                </div>
-              ) : (
-                <div style={{ width: "100%", height: 200 }} className="flex-1">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={data}
-                      layout="vertical"
-                      margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
-                    >
-                      <XAxis type="number" stroke="#888888" fontSize={10} tickLine={false} />
-                      <YAxis
-                        type="category"
-                        dataKey="name"
-                        stroke="#888888"
-                        fontSize={10}
-                        tickLine={false}
-                        width={100}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          background: "#18160f",
-                          borderColor: "var(--border)",
-                          borderRadius: "6px",
-                          fontSize: "11px",
-                        }}
-                        labelStyle={{ color: "white", fontWeight: "bold" }}
-                      />
-                      <Bar dataKey="votes" radius={[0, 4, 4, 0]}>
-                        {data.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
+              <div style={{ width: "100%", height: 200, flex: 1, minWidth: 0 }}>
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                  <BarChart
+                    data={data}
+                    layout="vertical"
+                    margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+                  >
+                    <XAxis type="number" stroke="var(--muted)" fontSize={10} tickLine={false} allowDecimals={false} />
+                    <YAxis
+                      type="category"
+                      dataKey="name"
+                      stroke="var(--muted)"
+                      fontSize={11}
+                      tickLine={false}
+                      width={100}
+                    />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const item = payload[0].payload;
+                          return (
+                            <div style={{
+                              background: "var(--foreground)",
+                              color: "#ffffff",
+                              padding: "6px 10px",
+                              borderRadius: "6px",
+                              fontSize: "11px",
+                            }}>
+                              <div style={{ fontWeight: 600 }}>{item.name}</div>
+                              <div style={{ color: "var(--accent-light)" }}>Votes: {item.votes}</div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Bar dataKey="displayVotes" radius={[0, 4, 4, 0]}>
+                      {data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           );
         })}
