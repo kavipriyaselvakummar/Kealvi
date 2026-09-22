@@ -1,4 +1,5 @@
 import ExecutiveSummary from "../ExecutiveSummary";
+import AiInsights from "../components/AiInsights";
 
 import {
   getQuestionsPage,
@@ -15,20 +16,20 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 100;
 
 export default async function SummaryPage() {
-  const { questions } =
-    await getQuestionsPage(
-      0,
-      PAGE_SIZE
-    );
+  const [
+    questionsResult,
+    pollsResult,
+    totalQuestions,
+    totalPollVotes,
+  ] = await Promise.all([
+    getQuestionsPage(0, PAGE_SIZE),
+    getPollsPage(0, PAGE_SIZE),
+    getQuestionCount(),
+    getPollVoteCount(),
+  ]);
 
-  const { polls } =
-    await getPollsPage(
-      0,
-      PAGE_SIZE
-    );
-
-  const totalQuestions =
-    await getQuestionCount();
+  const questions = questionsResult.questions;
+  const polls = pollsResult.polls;
 
   const totalQuestionVotes =
     questions.reduce(
@@ -39,12 +40,9 @@ export default async function SummaryPage() {
   const totalPolls =
     polls.length;
 
-  const totalPollVotes =
-    await getPollVoteCount();
-
   const featuredQuestions =
     questions.filter(
-      (q: any) => q.is_featured
+      (q: { is_featured: boolean }) => q.is_featured
     ).length;
 
   return (
@@ -70,6 +68,10 @@ export default async function SummaryPage() {
           featuredQuestions
         }
       />
+
+      <div style={{ marginTop: "24px" }}>
+        <AiInsights />
+      </div>
     </main>
   );
 }

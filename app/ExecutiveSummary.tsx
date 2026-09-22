@@ -46,17 +46,17 @@ export default function ExecutiveSummary({
       {cards.map((card) => (
         <div
           key={card.title}
-          className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-md"
+          className="rounded-xl border bg-white p-5 shadow hover:shadow-md transition"
         >
           <div className="text-2xl">
             {card.icon}
           </div>
 
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-gray-600">
             {card.title}
           </p>
 
-          <p className="mt-1 text-3xl font-bold">
+          <p className="mt-1 text-3xl font-bold text-gray-900">
             {card.value}
           </p>
         </div>

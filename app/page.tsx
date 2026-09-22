@@ -16,20 +16,20 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 10;
 
 export default async function Page() {
-  const { questions } =
-    await getQuestionsPage(
-      0,
-      PAGE_SIZE
-    );
+  const [
+    questionsResult,
+    pollsResult,
+    totalQuestions,
+    totalPollVotes,
+  ] = await Promise.all([
+    getQuestionsPage(0, PAGE_SIZE),
+    getPollsPage(0, PAGE_SIZE),
+    getQuestionCount(),
+    getPollVoteCount(),
+  ]);
 
-  const { polls } =
-    await getPollsPage(
-      0,
-      PAGE_SIZE
-    );
-
-  const totalQuestions =
-    await getQuestionCount();
+  const questions = questionsResult.questions;
+  const polls = pollsResult.polls;
 
   const totalQuestionVotes =
     questions.reduce(
@@ -40,12 +40,9 @@ export default async function Page() {
   const totalPolls =
     polls.length;
 
-  const totalPollVotes =
-    await getPollVoteCount();
-
   const featuredQuestions =
     questions.filter(
-      (q: any) => q.is_featured
+      (q: { is_featured: boolean }) => q.is_featured
     ).length;
 
   return (
@@ -89,7 +86,7 @@ export default async function Page() {
               📊
             </div>
 
-            <h3 className="text-xl font-bold">
+            <h3 className="text-xl font-bold text-gray-900">
               Summary
             </h3>
 
@@ -106,7 +103,7 @@ export default async function Page() {
               ❓
             </div>
 
-            <h3 className="text-xl font-bold">
+            <h3 className="text-xl font-bold text-gray-900">
               Questions
             </h3>
 
@@ -123,7 +120,7 @@ export default async function Page() {
               🗳️
             </div>
 
-            <h3 className="text-xl font-bold">
+            <h3 className="text-xl font-bold text-gray-900">
               Polls
             </h3>
 
@@ -140,7 +137,7 @@ export default async function Page() {
               📈
             </div>
 
-            <h3 className="text-xl font-bold">
+            <h3 className="text-xl font-bold text-gray-900">
               Analytics
             </h3>
 
@@ -157,7 +154,7 @@ export default async function Page() {
               🏆
             </div>
 
-            <h3 className="text-xl font-bold">
+            <h3 className="text-xl font-bold text-gray-900">
               Leaderboard
             </h3>
 

@@ -62,5 +62,33 @@ from (
     (22, 'How do I seed test data quickly?', 'Sam'),
     (23, 'Why is my Vercel function cold starting?', 'Noah'),
     (24, 'How do I scale reads with replicas?', 'Ravi'),
-    (25, 'What''s the best way to add auth later?', 'Priya')
 ) as seed(n, body, author);
+
+-- ── polls ────────────────────────────────────────────────────────
+create table polls (
+  id          uuid primary key default gen_random_uuid(),
+  body        text not null,
+  author      text,
+  created_at  timestamptz default now()
+);
+
+-- ── poll_options ──────────────────────────────────────────────────
+create table poll_options (
+  id          uuid primary key default gen_random_uuid(),
+  poll_id     uuid not null references polls(id) on delete cascade,
+  option_text text not null,
+  created_at  timestamptz default now()
+);
+
+-- ── poll_votes ────────────────────────────────────────────────────
+create table poll_votes (
+  id          uuid primary key default gen_random_uuid(),
+  poll_id     uuid not null references polls(id) on delete cascade,
+  option_id   uuid not null references poll_options(id) on delete cascade,
+  voter_id    text not null,
+  created_at  timestamptz default now(),
+  unique (poll_id, voter_id)
+);
+
+create index poll_votes_poll_id_idx on poll_votes (poll_id);
+create index poll_options_poll_id_idx on poll_options (poll_id);
